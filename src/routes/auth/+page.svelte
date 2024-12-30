@@ -32,8 +32,8 @@ const handleSubmit = async (isLogin) => {
 
   if (validateForm(form, isLogin)) {
     const endpoint = isLogin
-      ? 'http://127.0.0.1:8000/api/login'
-      : 'http://127.0.0.1:8000/api/register';
+      ? 'https://brevity-backend-kappa.vercel.app/api/login'
+      : 'https://brevity-backend-kappa.vercel.app/api/register';
 
     try {
       isLoading = true;

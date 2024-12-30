@@ -7,22 +7,20 @@
     { name: 'LinkedIn', icon: 'fa-brands fa-linkedin', href: '#' }
   ];
 </script>
-
 <footer class="bg-black/50 backdrop-blur-lg border-t border-gray-800">
-  <div class="max-w-7xl mx-auto px-6 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+  <div class="max-w-7xl mx-auto px-6 py-12 text-center">
+    <div class="flex flex-col items-center gap-12 mb-12">
       <!-- Brand Column -->
-      <div class="lg:col-span-2">
-        <div class="flex items-center gap-2 mb-4">
+      <div class="max-w-md">
+        <div class="flex justify-center items-center gap-2 mb-4">
           <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             Brevity
           </span>
         </div>
-        <p class="text-gray-400 text-sm max-w-md mb-6">
+        <p class="text-gray-400 text-sm mb-6">
           Transform your PDFs into clear, concise summaries using advanced AI technology. Save time and extract key insights instantly.
         </p>
       </div>
-
       <!-- Social Links -->
       <div>
         <h3 class="text-white font-semibold mb-4">Social</h3>
@@ -39,12 +37,10 @@
           {/each}
         </div>
       </div>
-
     </div>
-
     <!-- Bottom Bar -->
     <div class="pt-8 border-t border-gray-800">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex flex-col gap-4 items-center">
         <span class="text-gray-400 text-sm">
           © {currentYear} Brevity. All rights reserved.
         </span>

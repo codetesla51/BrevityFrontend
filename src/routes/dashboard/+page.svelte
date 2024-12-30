@@ -74,7 +74,7 @@ const handleFormSubmit = async (event) => {
       console.error('Error:', error);
       toast.error(`Failed to process PDF: ${error.message}`);
     }
-  } catch (error) {b
+  } catch (error) {
     console.error('Network Error:', error);
     if (error instanceof SyntaxError) {
       toast.error('Unexpected response from server. Please check the backend.');
