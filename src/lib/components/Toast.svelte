@@ -1,22 +1,17 @@
-<!-- Toast.svelte -->
 <script>
   import { onMount, onDestroy } from 'svelte';
-  
-  // Props
-  export let message = '';
-  export let type = 'info'; // 'success', 'error', 'warning', 'info'
-  export let position = 'bottom-right'; // 'top-right', 'top-left', 'bottom-right', 'bottom-left'
-  export let duration = 3000; // milliseconds, 0 for no auto-close
+    export let message = '';
+  export let type = 'info';
+  export let position = 'top-right';
+  export let duration = 3000;
   export let showLoader = false;
   export let closeManually = false;
   
-  // Internal state
   let visible = false;
   let progress = 100;
   let timer;
   let progressTimer;
   
-  // Icon mapping
   const icons = {
     success: 'fa-check-circle',
     error: 'fa-exclamation-circle',
@@ -24,7 +19,6 @@
     info: 'fa-info-circle'
   };
   
-  // Color mapping for mesh gradients
   const gradients = {
     success: 'from-green-900 to-green-800',
     error: 'from-red-900 to-red-800',

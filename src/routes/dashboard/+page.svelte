@@ -3,6 +3,8 @@
   import FileUpload from '$lib/components/FileUpload.svelte';
   import ProcessForm from '$lib/components/ProcessForm.svelte';
   import UploadsDisplay from '$lib/components/ResultCard.svelte';
+    import { userInfo, credits, fetchUserInfo } from '$lib/stores/user';
+
   import LoadingOverlay from '$lib/components/LoadingOverlay.svelte';
   import { checkAuthentication } from "$lib/utils/isAuth.js";
   
@@ -12,7 +14,8 @@
   let authToken;
   let isAuthenticated = false;
   let currentRequest = null;
-
+let refreshTrigger = 0;
+let refreshTokens = 0;
 const handleFileSelected = (event) => {
     file = event.detail.file;
     showForm = true;
@@ -38,12 +41,10 @@ const handleFormSubmit = async (event) => {
   const endpoint = 'http://127.0.0.1:8000/api/pdfConvert';
   let authToken = localStorage.getItem("auth_token");
   
-  // Split the token if it contains '|'
   if (authToken && authToken.includes('|')) {
     authToken = authToken.split('|')[1];
   }
   
-  // Create FormData object
   const data = new FormData();
   data.append('pdf', file);
   data.append('from_page', formData.fromPage);
@@ -66,12 +67,14 @@ const handleFormSubmit = async (event) => {
       const responseData = await response.json();
       console.log('Response:', responseData);
       toast.success('PDF processed successfully!');
+      refreshTrigger += 1
+      fetchUserInfo();
     } else {
       const error = await response.json();
       console.error('Error:', error);
       toast.error(`Failed to process PDF: ${error.message}`);
     }
-  } catch (error) {
+  } catch (error) {b
     console.error('Network Error:', error);
     if (error instanceof SyntaxError) {
       toast.error('Unexpected response from server. Please check the backend.');
@@ -108,7 +111,7 @@ const handleFormSubmit = async (event) => {
 />
         {/if}
       </div>
-      <UploadsDisplay />
+      <UploadsDisplay {refreshTrigger} />
     </div>
     
     <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>

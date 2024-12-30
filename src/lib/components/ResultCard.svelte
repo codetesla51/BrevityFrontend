@@ -1,21 +1,21 @@
 <script>
   import { onMount } from 'svelte';
-  import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
   
-  let uploads = [];
-  let loading = true;
-  let error = null;
+let uploads = [];
+let loading = true;
+let error = null;
 
-  // Format file size
-  const formatFileSize = (bytes) => {
-    if (!bytes) return '0 B';
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
-  };
+// Format file size
+const formatFileSize = (bytes) => {
+  if (!bytes) return '0 B';
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
+};
 
-  // Fetch PDFs from API
-const fetchPDFs = async () => {
+// Fetch PDFs from API
+export const fetchPDFs = async () => {
   try {
     let token = localStorage.getItem('auth_token');
     
@@ -23,13 +23,11 @@ const fetchPDFs = async () => {
       token = token.split('|')[1];
     }
 
-
     const response = await fetch('http://127.0.0.1:8000/api/fetchPDF', {
       method: 'GET', 
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
       }
     });
 
@@ -41,10 +39,11 @@ const fetchPDFs = async () => {
     const data = await response.json();
     uploads = data.pdfs.map(pdf => ({
       id: pdf.id,
-fileName: pdf.original_filename.length > 20 
-  ? pdf.original_filename.slice(0, 17) + '...' 
-  : pdf.original_filename,
-  date: new Date(pdf.created_at).toISOString(),
+      fileName: pdf.original_filename.length > 20 
+        ? pdf.original_filename.slice(0, 17) + '...' 
+        : pdf.original_filename,
+      fullFileName: pdf.original_filename,
+      date: new Date(pdf.created_at).toISOString(),
       size: formatFileSize(pdf.file_size),
       summaryPath: pdf.summary_path
     }));
@@ -55,73 +54,104 @@ fileName: pdf.original_filename.length > 20
     loading = false;
   }
 }; 
-const handleShare = async (id) => {
-    try {
-      const pdf = uploads.find(u => u.id === id);
-      console.log('Sharing:', pdf.fileName);
-    } catch (err) {
-      console.error('Error sharing PDF:', err);
-    }
-  };
 
-  const handleDownload = async (id) => {
-    try {
-      const pdf = uploads.find(u => u.id === id);
+const handleShare = async (id) => {
+  try {
+    const pdf = uploads.find(u => u.id === id);
+    console.log('Sharing:', pdf.fileName);
+  } catch (err) {
+    console.error('Error sharing PDF:', err);
+  }
+};
+
+const handleDownload = async (id) => {
+  try {
     let token = localStorage.getItem('auth_token');
     
     if (token && token.includes('|')) {
       token = token.split('|')[1];
     }
-      
-      const response = await fetch(`http://127.0.0.1:8000/api/downloadPDF/${id}`, {
-              method: 'GET', 
-        headers: {
-'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        }
-      });
+    
+    const response = await fetch(`http://127.0.0.1:8000/api/downloadPDF/${id}`, {
+      method: 'GET', 
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-      if (!response.ok) throw new Error('Download failed');
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = pdf.fileName;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
-    } catch (err) {
-      console.error('Error downloading PDF:', err);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Download failed');
     }
-  };
 
-  const handleDelete = async (id) => {
-    try {
-      const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/pdfs/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      });
+    // Create a blob from the PDF stream
+    const blob = await response.blob();
+    
+    // Get the PDF filename
+    const pdf = uploads.find(u => u.id === id);
+    const filename = pdf ? pdf.fullFileName : 'download.pdf';
 
-      if (!response.ok) throw new Error('Delete failed');
-      
-      uploads = uploads.filter(pdf => pdf.id !== id);
-    } catch (err) {
-      console.error('Error deleting PDF:', err);
+    // Create a temporary URL for the blob
+    const url = window.URL.createObjectURL(blob);
+    
+    // Create a temporary link element
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    
+    // Append to document, click and cleanup
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Error downloading PDF:', err);
+    alert(err.message || 'Failed to download PDF. Please try again.');
+  }
+};
+
+const handleDelete = async (id) => {
+  try {
+    if (!confirm('Are you sure you want to delete this PDF?')) {
+      return;
     }
-  };
 
-  onMount(() => {
-    fetchPDFs();
-  });
+    let token = localStorage.getItem('auth_token');
+    
+    if (token && token.includes('|')) {
+      token = token.split('|')[1];
+    }
+
+    const response = await fetch(`http://127.0.0.1:8000/api/deletePDF/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Delete failed');
+    }
+    
+    // Remove the deleted PDF from the uploads array
+    uploads = uploads.filter(pdf => pdf.id !== id);
+  } catch (err) {
+    console.error('Error deleting PDF:', err);
+    alert(err.message || 'Failed to delete PDF. Please try again.');
+  }
+};
+
+onMount(() => {
+  fetchPDFs();
+});
+export let refreshTrigger = 0; 
+
+$: if (refreshTrigger) {
+  fetchPDFs();
+}
 </script>
-
 <div class="space-y-8">
   <!-- Uploads Section -->
   <div class="backdrop-blur-xl bg-black/30 p-8 rounded-2xl border border-gray-800 shadow-2xl">

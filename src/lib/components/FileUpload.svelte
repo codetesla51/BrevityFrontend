@@ -38,7 +38,7 @@
 <div class="max-w-4xl mx-auto px-4 py-12">
   <div class="text-center mb-16">
     <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-6">
-      Uplaod Your PDF
+      Upload Your PDF
     </h1>
   </div>
 

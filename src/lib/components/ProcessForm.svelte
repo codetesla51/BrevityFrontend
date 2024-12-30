@@ -38,7 +38,18 @@
     {  name: 'nature' },
     {  name: 'elegant' },
     {  name: 'tech' },
-    {  name: 'minimal' } 
+    {  name: 'minimal' } ,
+    {  name: 'clean_light' } ,
+    {  name: 'soft_morning' } ,
+    {  name: 'midnight' } ,
+    {  name: 'corporate' } ,
+    {  name: 'forest' } ,
+    {  name: 'ocean' } ,
+    {  name: 'slate' } ,
+    {  name: 'violet' } ,
+    {  name: 'monochrome' } ,
+    {  name: 'sepia' } ,
+    {  name: 'arctic' } 
   ];
 
   const validateForm = () => {

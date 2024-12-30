@@ -12,7 +12,8 @@
   let errors = {};
   let isLoading = false;
   let isGoogleLogin = false;
-let isAuthenticated = false;
+ let isAuthenticated = false;
+ let isExchanging = false;
   const validateForm = (form, isLogin) => {
     errors = {};
     if (!form.email) errors.email = 'Email is required';
@@ -26,44 +27,52 @@ let isAuthenticated = false;
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (isLogin) => {
-    const form = isLogin ? loginForm : registerForm;
+const handleSubmit = async (isLogin) => {
+  const form = isLogin ? loginForm : registerForm;
 
-    if (validateForm(form, isLogin)) {
-      const endpoint = isLogin
-        ? 'http://127.0.0.1:8000/api/login'
-        : 'http://127.0.0.1:8000/api/register';
+  if (validateForm(form, isLogin)) {
+    const endpoint = isLogin
+      ? 'http://127.0.0.1:8000/api/login'
+      : 'http://127.0.0.1:8000/api/register';
 
-      try {
-        isLoading = true;
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', "Accept": "application/json" },
-          body: JSON.stringify({
-            email: form.email,
-            password: form.password,
-            name: isLogin ? undefined : form.name,
-          }),
-        });
+    try {
+      isLoading = true;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', "Accept": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          ...(isLogin ? {} : { name: form.name }),
+        }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
+      if (response.ok) {
+        // Make sure we're checking for the token in the correct place in the response
+        const token = data.token || data.access_token || data.auth_token;
+        
+        if (token) {
+          localStorage.setItem('auth_token', token);
           toast.success('Success! Redirecting to dashboard...');
-          localStorage.setItem('auth_token', data.token);
-        window.history.replaceState({}, document.title, "/auth");
-        window.location.href = '/dashboard';
+          window.history.replaceState({}, document.title, "/auth");
+          window.location.href = '/dashboard';
         } else {
-          toast.error(data.message || 'An error occurred');
+          console.error('No token in response:', data);
+          toast.error('Authentication error: No token received');
         }
-      } catch (err) {
-        toast.error('Network error occurred');
-      } finally {
-        isLoading = false;
+      } else {
+        toast.error(data.message || 'An error occurred');
       }
+    } catch (err) {
+      console.error('Submission error:', err);
+      toast.error('Network error occurred');
+    } finally {
+      isLoading = false;
     }
-  };
-
+  }
+};
   const handleGoogleSignIn = async () => {
   try {
     isGoogleLogin = true;
@@ -91,7 +100,7 @@ onMount(async () => {
   const endpoint = 'http://127.0.0.1:8000/api/exchangeToken';
 
   if (code) {
-      let isLoading = true;
+     isExchanging = true;
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -109,6 +118,9 @@ onMount(async () => {
       }
     } catch (error) {
       console.error(error);
+    }
+    finally{
+      isExchanging = false;
     }
   }
 
@@ -173,7 +185,7 @@ const getQueryParams = () => {
 
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading || isExchanging}
         class="mt-4 w-full flex justify-center items-center gap-5 py-3 rounded-lg font-medium 
                bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium 
                hover:from-blue-600 hover:to-purple-600 transform hover:-translate-y-0.5 
@@ -187,10 +199,11 @@ const getQueryParams = () => {
         Sign in
       </button>
 
-      <GoogleButton
-        isLoading={isGoogleLogin}
-        onClick={handleGoogleSignIn}
-      />
+<GoogleButton
+    isLoading={isGoogleLogin || isExchanging}
+    onClick={handleGoogleSignIn}
+    text={activeTab === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
+  />
     </form>
   {:else}
     <form on:submit|preventDefault={() => handleSubmit(false)}>  <!-- Changed from true to false -->
@@ -233,7 +246,7 @@ const getQueryParams = () => {
 
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading  || isExchanging}
         class="mt-4 w-full flex justify-center items-center gap-5 py-3 rounded-lg font-medium 
                bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium 
                hover:from-blue-600 hover:to-purple-600 transform hover:-translate-y-0.5 
@@ -247,10 +260,10 @@ const getQueryParams = () => {
         Create Account
       </button>
 
-      <GoogleButton
-        isLoading={isGoogleLogin}
-        onClick={handleGoogleSignIn}
-        text="Sign up with Google"
-      />
+<GoogleButton
+    isLoading={isGoogleLogin || isExchanging}
+    onClick={handleGoogleSignIn}
+    text={activeTab === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
+  />
     </form>  {/if}
 </AuthLayout>

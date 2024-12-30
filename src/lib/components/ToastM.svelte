@@ -9,7 +9,7 @@
   function createToast({
     message,
     type = 'info',
-    position = 'top-right',
+    position = 'bottom-right',
     duration = 3000,
     showLoader = true,
     closeManually = false
