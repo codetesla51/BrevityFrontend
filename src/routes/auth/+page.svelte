@@ -76,7 +76,8 @@ const handleSubmit = async (isLogin) => {
   const handleGoogleSignIn = async () => {
   try {
     isGoogleLogin = true;
-    const response = await fetch('http://localhost:8000/api/auth/google');
+    const response = await
+    fetch('https://brevity-backend-kappa.vercel.app/auth/google');
     const { url } = await response.json();
     window.location.href = url;
   } catch (err) {
@@ -97,7 +98,7 @@ export async function load({ url }) {
 
 onMount(async () => {  
   const { code, error } = getQueryParams();
-  const endpoint = 'http://127.0.0.1:8000/api/exchangeToken';
+  const endpoint = 'https://brevity-backend-kappa.vercel.app//exchangeToken';
 
   if (code) {
      isExchanging = true;

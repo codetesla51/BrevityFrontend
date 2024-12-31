@@ -25,7 +25,7 @@ export const fetchUserInfo = async () => {
             throw new Error("No auth token found. Please log in again.");
         }
 
-        const response = await fetch("http://127.0.0.1:8000/api/user", {
+        const response = await fetch("https://brevity-backend-kappa.vercel.app/user", {
             method: "GET",
             headers: {
                 Accept: "application/json",
