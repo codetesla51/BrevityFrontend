@@ -23,7 +23,7 @@ export const fetchPDFs = async () => {
       token = token.split('|')[1];
     }
 
-    const response = await fetch('http://127.0.0.1:8000/api/fetchPDF', {
+    const response = await fetch('https://brevity-backend-kappa.vercel.app/fetchPDF', {
       method: 'GET', 
       headers: {
         'Authorization': `Bearer ${token}`,

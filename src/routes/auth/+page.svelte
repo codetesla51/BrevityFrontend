@@ -98,7 +98,7 @@ export async function load({ url }) {
 
 onMount(async () => {  
   const { code, error } = getQueryParams();
-  const endpoint = 'https://brevity-backend-kappa.vercel.app//exchangeToken';
+  const endpoint = 'https://brevity-backend-kappa.vercel.app/exchangeToken';
 
   if (code) {
      isExchanging = true;
