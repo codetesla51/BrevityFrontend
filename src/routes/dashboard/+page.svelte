@@ -38,7 +38,7 @@ const handleFormSubmit = async (event) => {
   const { file, formData } = event.detail;
   console.log('Processing:', { file, formData });
   toast.success('Processing started...');
-  const endpoint = 'https://brevity-backend-kappa.vercel.app/pdfConvert';
+  const endpoint = 'http://127.0.0.1:8000/pdfConvert';
   let authToken = localStorage.getItem("auth_token");
   
   if (authToken && authToken.includes('|')) {

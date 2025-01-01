@@ -1,8 +1,11 @@
-curl -X POST https://brevity-backend-kappa.vercel.app/register \
-  -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "name": "Your Name",
-        "email": "your.email@example.com",
-        "password": "your_password"
-      }'
+SUPABASE_URL="https://ehasinzstggpytkeeqlm.supabase.co"
+BUCKET_NAME="Brevity"
+FILE_PATH="README.md"
+FILE_NAME=$(basename "$FILE_PATH")
+API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYXNpbnpzdGdncHl0a2VlcWxtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNTY1MDA5OCwiZXhwIjoyMDUxMjI2MDk4fQ.qVWuSbbsyvKsX2vSpAV22020FK3uvx0KY_7YItDb-UM"
+
+curl -X POST "$SUPABASE_URL/storage/v1/object/$BUCKET_NAME/uploads/$FILE_NAME" \
+-H "Authorization: Bearer $API_KEY" \
+-H "Content-Type: $(file --mime-type -b "$FILE_PATH")" \
+--data-binary @"$FILE_PATH"
+

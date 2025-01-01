@@ -13,7 +13,7 @@
   });
 
   let isMenuOpen = false;
-  $: isDashboard = $page.url.pathname.startsWith('/dashboard') || $page.url.pathname === '/buy_credits';
+  $: isDashboard = $page.url.pathname.startsWith('/dashboard') ;
 
   function logout() {
     localStorage.removeItem('auth_token');
@@ -50,12 +50,7 @@
           >
             Dashboard
           </a>
-          <a 
-            href="/buy_credits" 
-            class="text-gray-300 hover:text-white transition-colors"
-          >
-            Buy Credits
-          </a>
+          
           <button 
             on:click={logout}
             class="flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors"
@@ -118,7 +113,6 @@
             <span>{userName}</span>
           </div>
           <a href="/dashboard" class="text-gray-300 hover:text-white">Dashboard</a>
-          <a href="/buy_credits" class="text-gray-300 hover:text-white">Buy Credits</a>
           <button on:click={logout} class="flex items-center text-red-400 hover:text-red-300">
             <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
