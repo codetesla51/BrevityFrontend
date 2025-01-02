@@ -58,7 +58,6 @@ const handleFormSubmit = async (event) => {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authToken}`,
-        // Remove Content-Type header - let browser set it automatically for FormData
       },
       body: data,
     });
