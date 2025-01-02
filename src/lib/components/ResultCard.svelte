@@ -122,7 +122,7 @@ const handleDelete = async (id) => {
       token = token.split('|')[1];
     }
 
-    const response = await fetch(`http://127.0.0.1:8000/api/deletePDF/${id}`, {
+    const response = await fetch(`https://brevity-backend-kappa.vercel.app/deletePDF/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
