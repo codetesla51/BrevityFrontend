@@ -72,7 +72,7 @@ const handleDownload = async (id) => {
       token = token.split('|')[1];
     }
     
-    const response = await fetch(`http://127.0.0.1:8000/api/downloadPDF/${id}`, {
+    const response = await fetch(`https://brevity-backend-kappa.vercel.app/downloadPDF/${id}`, {
       method: 'GET', 
       headers: {
         'Authorization': `Bearer ${token}`
@@ -147,6 +147,7 @@ onMount(() => {
   fetchPDFs();
 });
 export let refreshTrigger = 0; 
+
 
 $: if (refreshTrigger) {
   fetchPDFs();
