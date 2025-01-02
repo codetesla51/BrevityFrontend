@@ -53,7 +53,7 @@ const handleFormSubmit = async (event) => {
   data.append('summary_type', formData.summaryType);
 
   try {
-    isLoading = true; // Show loading state
+    isLoading = true;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
