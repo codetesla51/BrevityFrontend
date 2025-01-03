@@ -38,28 +38,6 @@ export const fetchPDFs = async () => {
   }
 }; 
 
-const handleShare = async (id) => {
-  if (loadingStates.get(id)) return;
-  
-  try {
-    loadingStates.set(id, 'sharing');
-    loadingStates = loadingStates; // Trigger reactivity
-
-    const pdf = uploads.find(u => u.id === id);
-    // Generate a shareable link (you'll need to implement this based on your backend)
-    const shareableLink = `${window.location.origin}/shared/${id}`;
-    
-    // Copy to clipboard
-    await navigator.clipboard.writeText(shareableLink);
-    alert('Link copied to clipboard!');
-  } catch (err) {
-    console.error('Error sharing PDF:', err);
-    alert('Failed to share PDF. Please try again.');
-  } finally {
-    loadingStates.delete(id);
-    loadingStates = loadingStates;
-  }
-};
 
 const handleDownload = async (id) => {
   if (loadingStates.get(id)) return;
@@ -180,21 +158,7 @@ $: if (refreshTrigger) fetchPDFs();
   </div>
 </div>              
               <div class="flex items-center space-x-3">
-                <!-- Share Button -->
-                <button
-                  on:click={() => handleShare(upload.id)}
-                  disabled={loadingStates.get(upload.id)}
-                  class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 
-                    transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {#if loadingStates.get(upload.id) === 'sharing'}
-                    <div class="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                  {:else}
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                  {/if}
-                </button>
+
 
                 <!-- Download Button -->
                 <button
