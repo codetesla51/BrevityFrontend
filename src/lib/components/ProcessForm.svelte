@@ -30,7 +30,6 @@
   ];
 
   const themeTypes = [
-    {  name: 'dark' },
     {  name: 'blue' },
     { name: 'professional' },
     { name: 'modern' },
@@ -41,7 +40,6 @@
     {  name: 'minimal' } ,
     {  name: 'clean_light' } ,
     {  name: 'soft_morning' } ,
-    {  name: 'midnight' } ,
     {  name: 'corporate' } ,
     {  name: 'forest' } ,
     {  name: 'ocean' } ,

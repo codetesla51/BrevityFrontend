@@ -7,53 +7,54 @@
     { name: 'LinkedIn', icon: 'fa-brands fa-linkedin', href: 'https://www.linkedin.com/in/oladele-uthman-a61578298' }
   ];
 </script>
+
 <footer class="bg-black/50 backdrop-blur-lg border-t border-gray-800">
-  <div class="max-w-7xl mx-auto px-6 py-12 text-center">
-    <div class="flex flex-col items-center gap-12 mb-12">
-      <!-- Brand Column -->
-      <div class="max-w-md">
-        <div class="flex justify-center items-center gap-2 mb-4">
-          <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            Brevity
-          </span>
-        </div>
-        <p class="text-gray-400 text-sm mb-6">
+  <div class="container mx-auto px-6 py-12">
+    <div class="flex flex-col items-center space-y-8 mb-12">
+      <!-- Brand Section -->
+      <div class="text-center max-w-md">
+        <h2 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 mb-4">
+          Brevity
+        </h2>
+        <p class="text-gray-400 text-sm">
           Transform your PDFs into clear, concise summaries using advanced AI technology. Save time and extract key insights instantly.
         </p>
       </div>
+
       <!-- Social Links -->
-      <div>
-        <div class="flex  gap-4">
-          {#each socialLinks as social}
-            <a
-              href={social.href}
-              class="text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-3"
-              aria-label={social.name}
-            >
-              <i class="{social.icon} text-lg"></i>
-              <span class="text-sm">{social.name}</span>
-            </a>
-          {/each}
-        </div>
+      <div class="flex items-center gap-6">
+        {#each socialLinks as link}
+          <a
+            href={link.href}
+            class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.name}
+          >
+            <i class={`${link.icon} text-lg`}></i>
+            <span class="text-sm">{link.name}</span>
+          </a>
+        {/each}
       </div>
     </div>
-    <!-- Bottom Bar -->
-    <div class="pt-8 border-t border-gray-800">
-      <div class="flex flex-col gap-4 items-center">
-        <span class="text-gray-400 text-sm">
-          © {currentYear} Brevity. All rights reserved.
-        </span>
-        <div class="flex items-center gap-2 text-sm text-gray-400">
-          <span>Made with</span>
-          <i class="fas fa-heart text-red-500"></i>
-          <span>by</span>
-          <a 
-            href="https://github.com/codetesla51" 
-            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 hover:opacity-80 transition-opacity duration-200"
-          >
-            Uthman Dev
-          </a>
-        </div>
+
+    <!-- Copyright Section -->
+    <div class="pt-8 border-t border-gray-800 text-center">
+      <p class="text-gray-400 text-sm mb-4">
+        © {currentYear} Brevity. All rights reserved.
+      </p>
+      <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
+        <span>Made with</span>
+        <i class="fas fa-heart text-red-500"></i>
+        <span>by</span>
+        <a 
+          href="https://github.com/codetesla51" 
+          class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 hover:opacity-80 transition-duration-300"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Uthman Dev
+        </a>
       </div>
     </div>
   </div>
