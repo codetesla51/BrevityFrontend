@@ -17,13 +17,14 @@ export const credits = derived(userInfo, $userInfo => {
 export const fetchUserInfo = async () => {
     try {
         let authToken = localStorage.getItem("auth_token");
+                if (!authToken) {
+            throw new Error("No auth token found. Please log in again.");
+        }
+
         if (authToken && authToken.includes("|")) {
             authToken = authToken.split("|")[1];
         }
         
-        if (!authToken) {
-            throw new Error("No auth token found. Please log in again.");
-        }
 
         const response = await fetch("https://brevity-backend-kappa.vercel.app/user", {
             method: "GET",
