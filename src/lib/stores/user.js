@@ -5,7 +5,7 @@ export const userInfo = writable({
     userName: "",
     authToken: "",
     used: 0,
-    max: 10
+    max: 20
 });
 
 // Derived store for available credits
@@ -57,7 +57,7 @@ export const fetchUserInfo = async () => {
             userName: "",
             authToken: "",
             used: 0,
-            max: 10
+            max: 20
         });
     }
 };
