@@ -140,7 +140,7 @@ const getQueryParams = () => {
 
   onMount(() => {
 
-    isAuthenticated = await checkAuthentication();
+    isAuthenticated =checkAuthentication();
 
   });
 </script>
