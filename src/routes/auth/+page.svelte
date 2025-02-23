@@ -138,9 +138,13 @@ const getQueryParams = () => {
   };
 };
 
-  onMount(() => {
-
-    isAuthenticated =checkAuthentication();
+onMount(async () => {
+    isExchanging = true;
+    isAuthenticated = await checkAuthentication();
+    isExchanging = false;
+    if(isAuthenticated){
+      toast.success('Redirecting to dashboard...');
+    }
 
   });
 </script>
