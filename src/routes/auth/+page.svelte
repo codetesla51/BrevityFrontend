@@ -139,7 +139,9 @@ const getQueryParams = () => {
 };
 
   onMount(() => {
-    isAuthenticated = checkAuthentication();
+isExchanging = true;
+    isAuthenticated = await checkAuthentication();
+isExchanging = false;
   });
 </script>
 
